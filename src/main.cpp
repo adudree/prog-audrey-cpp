@@ -1,6 +1,5 @@
+#include "playGuessTheNumber.hpp"
 #include <iostream>
+#include <random>
 
-int main()
-{
-    std::cout << "Hello World\n";
-}
+int main() { playGuessTheNumber(); }

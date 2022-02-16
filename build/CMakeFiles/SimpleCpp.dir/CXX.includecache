@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/adudree/Documents/IMAC2/prog/prog-tp-s4/src/main.cpp
+playGuessTheNumber.hpp
+/home/adudree/Documents/IMAC2/prog/prog-tp-s4/src/playGuessTheNumber.hpp
+iostream
+-
+random
+-
+
+/home/adudree/Documents/IMAC2/prog/prog-tp-s4/src/playGuessTheNumber.cpp
+playGuessTheNumber.hpp
+/home/adudree/Documents/IMAC2/prog/prog-tp-s4/src/playGuessTheNumber.hpp
+
+/home/adudree/Documents/IMAC2/prog/prog-tp-s4/src/playGuessTheNumber.hpp
+iostream
+-
+random
+-
+
