@@ -4,7 +4,6 @@
 
 ### TP 
 - Débug et fin du Hangman 
-- D'ailleurs je n'aime pas trop la façon dont clang-format reformate mon code, je trouve ça pas assez aéré et je n'ai pas trouvé comment paramétrer tout ça :(
  
 ## 23 février 2022 
 
