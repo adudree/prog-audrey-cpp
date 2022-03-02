@@ -1,3 +1,0 @@
-/home/adudree/Documents/IMAC2/prog/prog-tp-s4/build/CMakeFiles/rebuild_cache.dir
-/home/adudree/Documents/IMAC2/prog/prog-tp-s4/build/CMakeFiles/edit_cache.dir
-/home/adudree/Documents/IMAC2/prog/prog-tp-s4/build/CMakeFiles/SimpleCpp.dir
