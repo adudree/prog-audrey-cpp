@@ -44,7 +44,7 @@ char pickOneChar(std::string& pickedChars, char myChar)
     }
     else {
         std::cout << "\nYou already proposed " << myChar << "! Pick another one\n";
-        return pickOneChar(pickedChars, getCharFromPlayer());
+        return pickOneChar(pickedChars, getInputFromPlayer<char>());
     }
 
     return -1;
@@ -113,13 +113,13 @@ void playHangman()
 
     while (!isWordFound(letterCount, wordToGuess) && life != 0) {
         std::string playerChar; // char chosen by the player
-                                // i need the replace() function later
-                                // and it doesn't work with a char :()
+                                // i need to use the replace() function later
+                                // and it doesn't work with a char :(
         int posCharInWord;
 
         std::cout << "\nYou have " << life << " lives left.\n";
 
-        playerChar = pickOneChar(pickedChars, getCharFromPlayer());
+        playerChar = pickOneChar(pickedChars, getInputFromPlayer<char>());
 
         if (isCharInWord(playerChar[0], wordToGuess, posCharInWord)) {
             replaceInWord(wordHidden, playerChar, posCharInWord);

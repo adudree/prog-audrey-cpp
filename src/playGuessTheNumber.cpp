@@ -2,19 +2,6 @@
 #include "playGuessTheNumber.hpp"
 #include "rand.hpp"
 
-int getIntFromPlayer()
-{
-    int numberPlayer;
-
-    while (std::cout << "\nEnter a number: " && !(std::cin >> numberPlayer)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max());
-        std::cout << "Invalid input; please re-enter.\n";
-    }
-
-    return numberPlayer;
-}
-
 void playGuessTheNumber()
 {
     std::cout << "========= GUESS THE NUMBER =========\n";
@@ -30,7 +17,7 @@ void playGuessTheNumber()
     std::cout << "I chose a number between " << min << " and " << max << ".\n";
 
     while (!isNumberFound) {
-        numberPlayer = getIntFromPlayer();
+        numberPlayer = getInputFromPlayer<int>();
 
         // compare values & end game if it has to be
         if (numberPlayer == numberToGuess) {
