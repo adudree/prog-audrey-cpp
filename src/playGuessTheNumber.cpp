@@ -1,5 +1,6 @@
 
 #include "playGuessTheNumber.hpp"
+#include "getFromPlayer.hpp"
 #include "rand.hpp"
 
 void playGuessTheNumber()
@@ -17,7 +18,7 @@ void playGuessTheNumber()
     std::cout << "I chose a number between " << min << " and " << max << ".\n";
 
     while (!isNumberFound) {
-        numberPlayer = getInputFromPlayer<int>();
+        numberPlayer = getFromPlayer<int>();
 
         // compare values & end game if it has to be
         if (numberPlayer == numberToGuess) {

@@ -1,5 +1,5 @@
-
 #include "playHangman.hpp"
+#include "getFromPlayer.hpp"
 #include "rand.hpp"
 
 std::string pickRandomWord()
@@ -8,84 +8,59 @@ std::string pickRandomWord()
     return words[rand(0, words.size() - 1)];
 }
 
-char getCharFromPlayer()
+bool isCharInString(const char& myChar, const std::string& myString)
 {
-    char charPlayer;
-
-    std::cout << "\nEnter a char: ";
-
-    while (!(std::cin >> charPlayer)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max());
-        std::cout << "Invalid input; please re-enter.\n";
-    }
-
-    return charPlayer;
+    return (myString.find(myChar) != std::string::npos);
 }
 
-bool isCharInString(char& myChar, std::string& myString)
-{
-    for (size_t i = 0; i < myString.size(); i++) {
-        if (myChar == myString[i]) {
-            return true;
-        }
-    }
-    return false;
-}
-
-char pickOneChar(std::string& pickedChars, char myChar)
+char pickOneChar(std::string& pickedChars, const char& myChar)
 {
     std::cout << "selected chars : " << pickedChars << std::endl;
 
     if (!isCharInString(myChar, pickedChars)) {
-        std::cout << "You chose " << myChar << std::endl;
+        std::cout << "You chose " << myChar << ".\n\n";
         pickedChars.push_back(myChar);
         return myChar;
     }
     else {
         std::cout << "\nYou already proposed " << myChar << "! Pick another one\n";
-        return pickOneChar(pickedChars, getInputFromPlayer<char>());
+        return pickOneChar(pickedChars, getFromPlayer<char>());
     }
 
     return -1;
 }
 
-std::string createHiddenWord(std::string& word)
+std::string createHiddenWord(const std::string& word)
 {
     std::string hidden;
 
     for (size_t i = 0; i < word.size(); i++) {
         hidden.push_back('_');
-        hidden.push_back(' ');
     }
     return hidden;
 }
 
-bool isCharInWord(char& myChar, std::string& word, int& position)
+void printHiddenWord(const std::string& word)
 {
     for (size_t i = 0; i < word.size(); i++) {
-        if (word[i] == myChar) {
-            position = i + 1;
-            return true;
+        std::cout << word[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+void replaceInWord(std::string& hidden, const char& toReplaceWith,
+                   const std::string& word)
+{
+    for (size_t i = 0; i < hidden.size(); i++) {
+        if (toReplaceWith == word[i]) {
+            hidden.replace(i, 1, 1, toReplaceWith);
         }
     }
-    std::cout << "\nOh no! " << myChar << " isn't in the word...\n\n";
-    return false;
 }
 
-void replaceInWord(std::string& hidden, std::string& toReplaceWith,
-                   int& position)
+bool isWordFound(std::string& hiddenWord, const std::string& wordToGuess)
 {
-    int posInWordHidden = position * 2 - 1;
-    hidden.replace(posInWordHidden - 1, 1, toReplaceWith);
-}
-
-bool isWordFound(size_t letterCount, std::string& wordToGuess)
-{
-    if (letterCount == wordToGuess.size()) {
-        return true;
-    }
-    return false;
+    return (hiddenWord == wordToGuess);
 }
 
 void endGame(int& life)
@@ -100,36 +75,28 @@ void endGame(int& life)
 
 void playHangman()
 {
-    std::cout << "========= HANGMAN =========\n";
+    std::cout << "\n========= HANGMAN =========\n";
 
-    std::string wordToGuess = pickRandomWord();
-    std::string wordHidden  = createHiddenWord(wordToGuess);
+    const std::string wordToGuess = pickRandomWord();
+    std::string       wordHidden  = createHiddenWord(wordToGuess);
+    std::string       pickedChars = ""; // all letters propositions
+    int               life        = 8;  // player's life
 
-    std::string pickedChars = ""; // all letters propositions
-    size_t      letterCount = 0;  // number of "good" letters found
-    int         life        = 8;  // player's life
+    printHiddenWord(wordHidden);
 
-    std::cout << wordHidden << std::endl;
-
-    while (!isWordFound(letterCount, wordToGuess) && life != 0) {
-        std::string playerChar; // char chosen by the player
-                                // i need to use the replace() function later
-                                // and it doesn't work with a char :(
-        int posCharInWord;
-
+    while (!isWordFound(wordHidden, wordToGuess) && life != 0) {
         std::cout << "\nYou have " << life << " lives left.\n";
 
-        playerChar = pickOneChar(pickedChars, getInputFromPlayer<char>());
+        const char playerChar = pickOneChar(pickedChars, getFromPlayer<char>());
 
-        if (isCharInWord(playerChar[0], wordToGuess, posCharInWord)) {
-            replaceInWord(wordHidden, playerChar, posCharInWord);
-            letterCount++;
+        if (isCharInString(playerChar, wordToGuess)) {
+            replaceInWord(wordHidden, playerChar, wordToGuess);
         }
         else {
+            std::cout << playerChar << " isn't in the word.\n\n";
             life--;
         }
-        std::cout << wordHidden << std::endl;
+        printHiddenWord(wordHidden);
     }
-
     endGame(life);
 }

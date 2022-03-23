@@ -1,7 +1,7 @@
 #include <array>
 #include <iostream>
 #include <string>
-#include "getInputFromUser.hpp"
+#include "getFromPlayer.hpp"
 #include "playGuessTheNumber.hpp"
 #include "playHangman.hpp"
 #include "rand.hpp"
@@ -12,19 +12,14 @@ void displayMenu()
     std::cout << "1 - Guess The Number \n2 - Hangman \nq - Quit";
 }
 
-void mainMenu()
-{
-}
-
 int main()
 {
     bool quit = false;
 
     while (!quit) {
         displayMenu();
-        char input = getInputFromPlayer<char>();
 
-        switch (input) {
+        switch (getFromPlayer<char>()) {
         case '1':
             playGuessTheNumber();
             break;

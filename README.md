@@ -1,5 +1,10 @@
 # AVANCEE - J'en suis où ? 
 
+## 23 mars 2022
+
+### TP 
+- gestion des issues + nettoyage du Hangman (encore, oui) (un jour il sera propre) 
+
 ## 16 mars 2022 
 
 ### TP 
