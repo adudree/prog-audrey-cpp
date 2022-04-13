@@ -13,18 +13,19 @@ bool isCharInString(const char& myChar, const std::string& myString)
     return (myString.find(myChar) != std::string::npos);
 }
 
-char pickOneChar(std::string& pickedChars, const char& myChar)
+char pickOneChar(std::string& pickedChars)
 {
+    const char myChar = getFromPlayer<char>();
+
     std::cout << "selected chars : " << pickedChars << std::endl;
 
     if (!isCharInString(myChar, pickedChars)) {
         std::cout << "You chose " << myChar << ".\n\n";
-        pickedChars.push_back(myChar);
         return myChar;
     }
     else {
-        std::cout << "\nYou already proposed " << myChar << "! Pick another one\n";
-        return pickOneChar(pickedChars, getFromPlayer<char>());
+        std::cout << "\nYou already proposed " << myChar << "! Pick another one.\n";
+        return pickOneChar(pickedChars);
     }
 
     return -1;
@@ -87,7 +88,8 @@ void playHangman()
     while (!isWordFound(wordHidden, wordToGuess) && life != 0) {
         std::cout << "\nYou have " << life << " lives left.\n";
 
-        const char playerChar = pickOneChar(pickedChars, getFromPlayer<char>());
+        const char playerChar = pickOneChar(pickedChars);
+        pickedChars.push_back(playerChar);
 
         if (isCharInString(playerChar, wordToGuess)) {
             replaceInWord(wordHidden, playerChar, wordToGuess);

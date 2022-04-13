@@ -1,5 +1,10 @@
 # AVANCEE - J'en suis où ? 
 
+## 13 avril 2022 
+
+### TP 
+- derniers soucis du hangman réglés
+
 ## 23 mars 2022
 
 ### TP 
