@@ -4,9 +4,7 @@
 
 ### TP 
 - installation (laborieuse) de P6 + gestion problèmes 
-- début morpion (affichage grille + récup index de la case choisie)
-
-Beaucoup de problèmes avec Linux, tentative de passage sous Windows, puis retour sous Linux parce que ça voulait pas non plus... Donc j'ai perdu énormément de temps (et de motivation) malheureusement. 
+- morpion fonctionnel (mais code pas nettoyé)
 
 ## 13 avril 2022 
 

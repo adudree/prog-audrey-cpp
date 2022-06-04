@@ -67,6 +67,120 @@ void drawBoard(int size, p6::Context& ctx)
     }
 }
 
+// décalage pour affichage des ronds
+glm::vec2 bottomLeftToCenter(glm::vec2 posBottomLeft, int totalSize)
+{
+    return posBottomLeft + cellSize(totalSize);
+}
+
+void drawNought(p6::Context& ctx, glm::vec2 position, int totalSize)
+{
+    ctx.fill = {0.8f, 0.2f, 0.3f}; // pink
+
+    ctx.circle(p6::Center{bottomLeftToCenter(position, totalSize)}, p6::Radius{cellSize(totalSize)});
+
+    ctx.fill = {0.4f, 0.2f, 0.8f}; // purple
+
+    ctx.circle(p6::Center{bottomLeftToCenter(position, totalSize)}, p6::Radius{cellSize(totalSize) * 2 / 3});
+}
+
+void drawCross(p6::Context& ctx, glm::vec2 position, int totalSize)
+{
+    // je voulais changer le code pour dessiner une autre forme
+    // si tu lis ces lignes c'est que j'ai pas eu le temps
+
+    ctx.fill = {0.2f, 0.8f, 0.3f}; // green
+
+    ctx.circle(p6::Center{bottomLeftToCenter(position, totalSize)}, p6::Radius{cellSize(totalSize)});
+}
+
+void addNoughtOrCross(p6::Context& ctx, cell selectedCell, int totalSize, int currentPlayer)
+{
+    glm::vec2 relPosition = coordAbsToRel(selectedCell, totalSize);
+
+    if (currentPlayer == 1)
+        drawNought(ctx, relPosition, totalSize);
+    else
+        drawCross(ctx, relPosition, totalSize);
+}
+
+class Board {
+    int _size;
+    int _values[3][3];
+
+public:
+    Board(int totalSize = 0)
+    {
+        _size = totalSize;
+        for (int i = 0; i < _size; i++) {
+            for (int j = 0; j < _size; j++) {
+                _values[i][j] = 0;
+            }
+        }
+    }
+
+    int readValue(cell index)
+    {
+        return _values[index.posX][index.posY];
+    }
+
+    void addValue(cell index, int player)
+    {
+        if (_values[index.posX][index.posY] == 0) {
+            _values[index.posX][index.posY] = player;
+        }
+        if (testWinner() != 0) {
+            endGame(player);
+        }
+    }
+    void endGame(int winner)
+    {
+        for (int i = 0; i < _size; i++) {
+            for (int j = 0; j < _size; j++) {
+                _values[i][j] = -1;
+            }
+        }
+        std::cout << "Player " << winner << " won!" << std::endl;
+    }
+
+    int testWinner()
+    {
+        for (int i = 0; i < _size; i++) {
+            // test colonnes
+            if (_values[i][0] != 0 &&
+                _values[i][0] == _values[i][1] &&
+                _values[i][0] == _values[i][2]) {
+                return _values[i][0];
+            }
+
+            // test lignes
+            else if (_values[0][i] != 0 &&
+                     _values[0][i] == _values[1][i] &&
+                     _values[0][i] == _values[2][i]) {
+                return _values[0][i];
+            }
+        }
+
+        // diagonales
+        if (_values[0][0] != 0 &&
+            _values[0][0] == _values[1][1] &&
+            _values[0][0] == _values[2][2]) {
+            std::cout << "DIAGONALE 1\n";
+            return _values[0][0];
+        }
+
+        else if (_values[2][0] != 0 &&
+                 _values[2][0] == _values[1][1] &&
+                 _values[2][0] == _values[0][2]) {
+            std::cout << "DIAGONALE 2\n";
+            return _values[2][0];
+        }
+
+        else
+            return 0;
+    }
+};
+
 // ==================== CELLS ======================== //
 
 cell getActiveCell(glm::vec2 position, int totalSize)
@@ -80,20 +194,38 @@ cell getActiveCell(glm::vec2 position, int totalSize)
     return activeCell;
 }
 
-int main()
+// ==================== PLAYER ======================== //
+
+int switchPlayer(int currentPlayer)
+{
+    if (currentPlayer == 1)
+        return 2;
+    else
+        return 1;
+}
+
+void playNoughtCrosses()
 {
     auto ctx = p6::Context{{800, 800, "Noughts & Crosses"}};
 
-    drawBoard(3, ctx);
+    int player = 1;
+    int size   = 3;
+
+    Board board(size);
+
+    drawBoard(size, ctx);
 
     ctx.mouse_pressed = [&](p6::MouseButton button) {
         switch (button.button) {
         case p6::Button::Left:
-            std::cout << getActiveCell(ctx.mouse(), 3).posY << std::endl;
+
+            if (board.readValue(getActiveCell(ctx.mouse(), size)) == 0) {
+                addNoughtOrCross(ctx, getActiveCell(ctx.mouse(), size), size, player);
+                board.addValue(getActiveCell(ctx.mouse(), size), player);
+                player = switchPlayer(player);
+            }
             break;
-        case p6::Button::Right:
-            break;
-        case p6::Button::Middle: break;
+        default: break;
         }
         return 0;
     };
@@ -102,24 +234,30 @@ int main()
     };
 
     ctx.start();
+}
 
-    // bool quit = false;
+int main()
+{
+    bool quit = false;
 
-    // while (!quit) {
-    //     displayMenu();
+    while (!quit) {
+        displayMenu();
 
-    //     switch (getFromPlayer<char>()) {
-    //     case '1':
-    //         playGuessTheNumber();
-    //         break;
-    //     case '2':
-    //         playHangman();
-    //         break;
-    //     case 'q':
-    //         std::cout << "Goodbye!\n";
-    //         quit = true;
-    //         break;
-    //     default: break;
-    //     }
-    // }
+        switch (getFromPlayer<char>()) {
+        case '1':
+            playGuessTheNumber();
+            break;
+        case '2':
+            playHangman();
+            break;
+        case '3':
+            playNoughtCrosses();
+            break;
+        case 'q':
+            std::cout << "Goodbye!\n";
+            quit = true;
+            break;
+        default: break;
+        }
+    }
 }
