@@ -1,9 +1,21 @@
 # AVANCEE - J'en suis où ? 
 
+## 04 juin 2022 
+
+### TP 
+- installation (laborieuse) de P6 + gestion problèmes 
+- début morpion (affichage grille + récup index de la case choisie)
+
+Beaucoup de problèmes avec Linux, tentative de passage sous Windows, puis retour sous Linux parce que ça voulait pas non plus... Donc j'ai perdu énormément de temps (et de motivation) malheureusement. 
+
 ## 13 avril 2022 
 
 ### TP 
 - derniers soucis du hangman réglés
+
+### Cours lus & utilisés 
+- Git submodules
+- CMake
 
 ## 23 mars 2022
 
